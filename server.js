@@ -28,6 +28,17 @@ app.get('/todos/:id', function (req, res) {
 	}
 });
 
+app.delete('/todos/:id', function (req, res) {
+	var todoId = parseInt(req.params.id, 10);
+	var matchedTodo = _.findWhere(todos, {id: todoId});
+	if (!matchedTodo) {
+		res.status(404).send();
+	} else {
+		todos = _.without(todos, matchedTodo);
+		res.json(matchedTodo);
+	}
+});
+
 app.post('/todos', function (req, res) {
 	var body = _.pick(req.body, 'description', 'completed');
 	if (!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length == 0) {
